@@ -6,3 +6,9 @@ var f1 = function() {
 f1();
 
 console.log(x);
+
+var f2 = function() {
+    x = "inside f2";
+};
+f2();
+console.log(x);
