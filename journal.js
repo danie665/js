@@ -97,3 +97,36 @@ if (typeof module != "undefined" && module.exports && (typeof window == "undefin
   module.exports = JOURNAL;
 if (typeof global != "undefined" && !global.JOURNAL)
   global.JOURNAL = JOURNAL;
+
+function hasEvent(event, entry) {
+    return entry.events.indexOf(event) != -1;
+}
+
+function phi(table) {
+    return (table[3] * table[0] - table[2] * table[1]) /
+        Math.sqrt((table[2] + table[3]) *
+                  (table[0] + table[1]) *
+                  (table[1] + table[3]) *
+                  (table[0] + table[2]));
+}
+
+function tableFor(event, journal) {
+    var table = [0, 0, 0, 0];
+    for (var i = 0; i < journal.length; i++) {
+        var entry = journal[i], index = 0;
+        if (hasEvent(event, entry)) index += 1;
+        if (entry.squirrel) index += 2;
+        table[index] += 1;
+    }
+    return table;
+}
+
+var map = {};
+function storePhi(event, phi) {
+    map[event] = phi;
+}
+
+function gatherCorrelations(journal) {
+    var phis = {};
+    for (var entry = 0; entry < journal.length; entry++) {
+        var events = journal[entry].events;
