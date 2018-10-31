@@ -47,37 +47,20 @@ if (typeof module != "undefined" && module.exports)
 
 var ancestry = JSON.parse(ANCESTRY_FILE);
 
-function hasMother(mother) {
-    j = 0;
-    while (j < ancestry.length) {
-        if (ancestry[j]["name"] == mother)
-            return true;
-        j++;
-    }
-    return false;
+function average(array) {
+    function plus(a, b) { return a + b; }
+    return array.reduce(plus) / array.length;
 }
 
-function getMomDOB(mother) {
-    k = 0;
-    while (k < ancestry.length) {
-        if (ancestry[k]["name"] == mother)
-            return ancestry[k]["born"];
-        k++;
-    }
-    return null;
-}
+var byName = {};
+ancestry.forEach(function(person) {
+    byName[person.name] = person;
+});
 
-avgAge = 0;
-cntAge = 0;
-i = 0;
-while (i < ancestry.length) {
-    if (hasMother(ancestry[i]["mother"])){
-        childBirth = ancestry[i]["born"];
-        motherBirth = getMomDOB(ancestry[i]["mother"]);
-        avgAge += (childBirth - motherBirth);
-        cntAge++;
-    }
-    i++;
-}
+var differences = ancestry.filter(function(person) {
+    return byName[person.mother] != null;
+}).map(function(person) {
+    return person.born - byName[person.mother].born;
+});
 
-console.log("Average age difference: ", (avgAge/cntAge));
+console.log(average(differences));

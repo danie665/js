@@ -47,14 +47,51 @@ if (typeof module != "undefined" && module.exports)
 
 var ancestry = JSON.parse(ANCESTRY_FILE);
 
-aLength = ancestry.length;
+function historicalLifeExpectancy(data) {
 
-mLife = ancestry.reduce(function(total, curr) {
-            total += (curr.died - curr.born);
-            return total;
-});
+    output = []
 
+    // remove unnecessary information
+    ageData = data.map(function(person) {
+        ageObject = {
+            "death": person.died,
+            "life": person.died - person.born,
+            "century": Math.ceil(person.died / 100),
+        };
+        return ageObject;
+    });
+    
+    // create list of centuries
+    centuriesList = [];    
+    i = 0;
+    while (i < ageData.length) {
+        century = Math.ceil(ageData[i]["death"] / 100);
+        if (!centuriesList.includes(century))
+            centuriesList.push(century);
+        i++;
+    }
 
+    // create list of centuries objects
+    i = 0;
+    while (i < centuriesList.length) {
+        relData = ageData.filter(function(person) {
+            return centuriesList[i] == person.century;
+        });
+        totalLife = 0
+        j = 0;
+        while (j < relData.length) {
+            totalLife += relData[j]["life"];
+            j++;
+        }
+        outputObject = {
+            "century": centuriesList[i],
+            "avgLife": totalLife / relData.length,
+        }
+        output.push(outputObject);
+        i++;
+    }
 
+    return output;
+}
 
-cAvg =
+console.log(historicalLifeExpectancy(ancestry));

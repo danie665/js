@@ -47,37 +47,30 @@ if (typeof module != "undefined" && module.exports)
 
 var ancestry = JSON.parse(ANCESTRY_FILE);
 
-function hasMother(mother) {
-    j = 0;
-    while (j < ancestry.length) {
-        if (ancestry[j]["name"] == mother)
-            return true;
-        j++;
-    }
-    return false;
+function average(array) {
+    function plus(a, b) { return a + b; }
+    return array.reduce(plus) / array.length;
 }
 
-function getMomDOB(mother) {
-    k = 0;
-    while (k < ancestry.length) {
-        if (ancestry[k]["name"] == mother)
-            return ancestry[k]["born"];
-        k++;
-    }
-    return null;
+function groupBy(array, groupOf) {
+    var groups = {};
+    array.forEach(function(element) {
+        var groupName = groupOf(element);
+        if (groupName in groups)
+            groups[groupName].push(element);
+        else
+            groups[groupName] = [element];
+    });
+    return groups;
 }
 
-avgAge = 0;
-cntAge = 0;
-i = 0;
-while (i < ancestry.length) {
-    if (hasMother(ancestry[i]["mother"])){
-        childBirth = ancestry[i]["born"];
-        motherBirth = getMomDOB(ancestry[i]["mother"]);
-        avgAge += (childBirth - motherBirth);
-        cntAge++;
-    }
-    i++;
-}
+var byCentury = groupBy(ancestry, function(person) {
+    return Math.ceil(person.died / 100);
+});
 
-console.log("Average age difference: ", (avgAge/cntAge));
+for (var century in byCentury) {
+    var ages = byCentury[century].map(function(person) {
+        return person.died - person.born;
+    });
+    console.log(century + ": " + average(ages));
+}
