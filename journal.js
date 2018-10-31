@@ -130,3 +130,28 @@ function gatherCorrelations(journal) {
     var phis = {};
     for (var entry = 0; entry < journal.length; entry++) {
         var events = journal[entry].events;
+        for (var i = 0; i < events.length; i++) {
+            var event = events[i];
+            if (!(event in phis))
+                phis[event] = phi(tableFor(event, journal));
+        }
+    }
+    return phis;
+}
+
+
+var correlations = gatherCorrelations(JOURNAL);
+for (var event in correlations) {
+    var correlation = correlations[event];
+    if (correlation > 0.1 || correlation < -0.1) {
+        console.log(event + ": " + correlation);
+    }
+}
+
+for (var i = 0; i < JOURNAL.length; i++) {
+    var entry = JOURNAL[i];
+    if (hasEvent("peanuts", entry) &&
+        !hasEvent("brushed teeth", entry))
+        entry.events.push("peanut teeth");
+}
+console.log(phi(tableFor("peanut teeth", JOURNAL)));
