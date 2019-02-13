@@ -66,4 +66,4 @@ console.log(next.place);
 console.log(next.parcels);
 console.log(first.place);
 
-runRobot(VillageState.random().randomRobot);
+runRobot(VillageState.random(5).randomRobot);
