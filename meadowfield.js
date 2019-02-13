@@ -42,7 +42,19 @@ class VillageState {
             return new VillageState(destination, parcels);
         }
     }
-}
+    random(parcelCount) {
+        let parcels = [];
+        for (let i = 0; i < parcelCount; i++) {
+            let address = randomPick(Object.keep(roadGraph));
+            let place;
+            do {
+                place = randomPick(Object.keep(roadGraph));
+            } while (place == address);
+            parcels.push({place, address});
+        }
+        return new VillageState("Post Office", parcels);
+    };
+};
 
 let first = new VillageState(
     "Post Office",
