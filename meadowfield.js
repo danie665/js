@@ -82,17 +82,13 @@ const mailRoute = [
     "Marketplace", "Post Office"
 ];
 
-function routeRobot(state, memory) {
-    if (memory.length == 0) {
-        memory = mailRoute;
-    }
-    return {direction: memory[0], memory: memory.slice(1)};
-}
-
 function findRoute(graph, from, to) {
     let work = [{at: from, route: []}];
     for (let i = 0; i < work.length; i++) {
         let {at, route} = work[i];
-        
+    }
+}
+
+function goalOrientedRobot({place, parcels}, route) {}
 
 runRobot(VillageState.random(), routeRobot, []);
