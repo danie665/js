@@ -49,7 +49,7 @@ function randomPick(array) {
     return array[choice];
 }
 
-VillageState.random = function(parcelCount = 5) {
+VillageState.random = function(parcelCount = 100) {
     let parcels = [];
     for (let i = 0; i < parcelCount; i++) {
         let address = randomPick(Object.keys(roadGraph));
@@ -65,13 +65,12 @@ VillageState.random = function(parcelCount = 5) {
 function runRobot(state, robot, memory) {
     for (let turn = 0;; turn++) {
         if (state.parcels.length == 0) {
-            console.log(`Done in ${turn} turns`);
+            return turn;
             break;
         }
         let action = robot(state, memory);
         state = state.move(action.direction);
         memory = action.memory;
-        console.log(`Moved to ${action.direction}`);
     }
 }
 
@@ -100,4 +99,34 @@ function goalOrientedRobot({place, parcels}, route) {
     return {direction: route[0], memory: route.slice(1)};
 }
 
-runRobot(VillageState.random(), goalOrientedRobot, []);
+const mailRoute = [
+    "Alice's House", "Cabin", "Alice's House", "Bob's House",
+    "Town Hall", "Daria's House", "Ernie's House",
+    "Grete's House", "Shop", "Grete's House", "Farm",
+    "Marketplace", "Post Office"
+];
+
+function routeRobot(state, memory) {
+    if (memory.length == 0) {
+        memory = mailRoute;
+    }
+    return {direction: memory[0], memory: memory.slice(1)};
+}
+
+function compareRobots(robot1, memory1, robot2, memory2) {
+    goalRobotSum = 0;
+    routeRobotSum = 0;
+    i = 0;
+    while (i < 100) {
+        myVillageState = VillageState.random();
+        goalRobotSum += runRobot(myVillageState, goalOrientedRobot, []);
+        routeRobotSum += runRobot(myVillageState, routeRobot, []);
+        i++;
+    }
+    console.log("Goal robot:");
+    console.log(goalRobotSum / i+1);
+    console.log("Route robot:");
+    console.log(routeRobotSum / i+1);
+}
+
+compareRobots(routeRobot, [], goalOrientedRobot, []);
