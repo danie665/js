@@ -1,0 +1,24 @@
+{
+  "name": "js",
+  "version": "1.0.0",
+  "description": "it can't depend",
+  "main": "main.js",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "ini": "^1.3.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danie665/js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danie665/js/issues"
+  },
+  "homepage": "https://github.com/danie665/js#readme"
+}
