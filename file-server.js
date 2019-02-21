@@ -1,6 +1,7 @@
-// Create server and reject requesr
 const {createServer} = require("http");
 const methods = Object.create(null);
+
+// Create listener
 createServer((request, response) => {
   let handler = methods[request.method] || notAllowed;
   handler(request)
@@ -14,3 +15,11 @@ createServer((request, response) => {
       else response.end(body);
     });
 }).listen(8000);
+
+// Reject invalid requests
+async function notAllowed(request) {
+  return {
+    status: 405,
+    body: `Method ${request.method} not allowed. `
+  };
+}
