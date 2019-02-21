@@ -23,3 +23,8 @@ async function notAllowed(request) {
     body: `Method ${request.method} not allowed. `
   };
 }
+
+const {parse} = request("url");
+const {resolve, sep} = require("path");
+const baseDirectory = process.cwd();
+
