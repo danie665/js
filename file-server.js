@@ -9,4 +9,8 @@ createServer((request, response) => {
       return {body: String(error), status: 500}
     })
     .then(({body, status = 200, type = "text/plain"}) => {
-      response.writeHead(status, {"Content-Type": 
+      response.writeHead(status, {"Content-Type": type});
+      if (body && body.pipe) body.pipe(response);
+      else response.end(body);
+    });
+}).listen(8000);
