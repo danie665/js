@@ -20,7 +20,7 @@ createServer((request, response) => {
 async function notAllowed(request) {
   return {
     status: 405,
-    body: `Method ${request.method} not allowed. `
+    body: `Method ${request.method} not allowed.`
   };
 }
 
@@ -37,3 +37,9 @@ function urlPath(url) {
   }
   return path;
 }
+
+const {createReadStream} = require("fs");
+const {stat, readdir} = require("fs").promises;
+const mime = require("mime");
+
+methods.GET = async function(request {}
