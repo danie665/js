@@ -86,4 +86,8 @@ function pipeStream(from, to) {
    });
 }
 
-metho
+methods.PUT = async function(request) {
+  let path = urlPath(request.url);
+  await pipeStream(request, createWriteDtream(path));
+  return {status: 204};
+};
