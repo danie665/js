@@ -5,6 +5,6 @@ request({
     method: "POST"
 }, response => {
     response.on("data", chunk =>
-        process.stdout.write(chunk.toSTring()));
+        process.stdout.write(chunk.toString()));
 }).end("Hello server");
 
