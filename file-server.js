@@ -1,7 +1,7 @@
 const {createServer} = require("http");
+
 const methods = Object.create(null);
 
-// Create listener
 createServer((request, response) => {
   let handler = methods[request.method] || notAllowed;
   handler(request)
@@ -16,7 +16,6 @@ createServer((request, response) => {
     });
 }).listen(8000);
 
-// Reject invalid requests
 async function notAllowed(request) {
   return {
     status: 405,
@@ -24,15 +23,16 @@ async function notAllowed(request) {
   };
 }
 
-const {parse} = request("url");
+const {parse} = require("url");
 const {resolve, sep} = require("path");
+
 const baseDirectory = process.cwd();
 
-// Decode URL path
 function urlPath(url) {
   let {pathname} = parse(url);
   let path = resolve(decodeURIComponent(pathname).slice(1));
-  if (path != baseDirectory && !path.startsWith(baseDirectory + sep)) {
+  if (path != baseDirectory &&
+        !path.startsWith(baseDirectory + sep)) {
     throw {status: 403, body: "Forbidden"};
   }
   return path;
